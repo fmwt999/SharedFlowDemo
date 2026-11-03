@@ -22,6 +22,8 @@ import kotlinx.coroutines.flow.SharedFlow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,27 +49,34 @@ fun ScreenSetup(
     MainScreen(modifier, viewModel.sharedFlow)
 }
 
+
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
     sharedFlow: SharedFlow<Int>
 ) {
-    val messages = remember { mutableStateListOf<Int>()}
-    val lifecycleOwner = LocalLifecycleOwner.current
-            LaunchedEffect(key1 = Unit) {
-                sharedFlow.collect {
-                    messages.add(it)
-                }
-            }
-    LazyColumn(modifier = modifier) {
-    items(messages) {
-        Text(
-            "Collected Value = $it",
-            style = MaterialTheme.typography.headlineLarge,
-            modifier = Modifier.padding(5.dp)
-        )
+    val messages = remember {
+        mutableStateListOf<Int>()
     }
-}
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    LaunchedEffect(key1 = Unit) {
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            sharedFlow.collect {
+                println("Collecting $it")
+                messages.add(it)
+            }
+        }
+    }
+    LazyColumn(modifier = modifier) {
+        items(messages) {
+            Text(
+                "Collected Value = $it",
+                style = MaterialTheme.typography.headlineLarge,
+                modifier = Modifier.padding(5.dp)
+            )
+        }
+    }
 }
 
 @Preview(showBackground = true)

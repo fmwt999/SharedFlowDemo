@@ -19,6 +19,9 @@ import androidx.compose.ui.unit.dp
 import com.example.sharedflowdemo.ui.theme.SharedFlowDemoTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.flow.SharedFlow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.LaunchedEffect
+import androidx.lifecycle.compose.LocalLifecycleOwner
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ScreenSetup(modifier: Modifier = Modifier) {
+fun ScreenSetup(modifier: Modifier = Modifier, viewModel: DemoViewModel = viewModel()) {
     MainScreen(modifier)
 }
 @Composable
